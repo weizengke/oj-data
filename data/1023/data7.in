@@ -1,0 +1,12 @@
+4
+system
+shutdown
+SOCKET
+DeleteFile
+6
+#include<stdio.h>
+int main(){ //main
+ system("shutdown");
+ SOCKET sock;
+ return 0;
+}

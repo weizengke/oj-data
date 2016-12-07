@@ -1,0 +1,19 @@
+7
+DeleteFile
+system
+SOCKET
+send
+CreateProcess
+CreateFile
+CreateThread
+10
+#include<stdio.h>
+int main(){ //main
+ //system("shutdown");
+ Mysystem("shutdown");
+ /* DeleteFile("D:\\1.txt");send();
+*/DeleteFile("D:\\1.txt");
+_createThread();CreateThread();/*recv*/system1("calc");
+while(1){CreateThread();2system("cmd");
+if(CreateFile("D:\\1.txt")){//recvf
+}}return 0;}

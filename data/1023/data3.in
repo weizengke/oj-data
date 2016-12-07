@@ -1,0 +1,13 @@
+1
+system
+10
+#include<stdio.h>
+int main()//main function
+{        
+   int a=3/*,b=4*/,c=7;/*2system2();
+   char str[100]="I Love You"; 
+	system(); 
+   int len=strlen(str)	;
+   printf("%d",a);
+*/
+}

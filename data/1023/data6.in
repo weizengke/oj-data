@@ -1,0 +1,16 @@
+4
+DeleteFile
+system
+shutdown
+SOCKET
+10
+#include<stdio.h>
+int main(){ //main
+ //system("shutdown");
+ Mysystem("shutdown");
+ SOCKET sock;
+ /* DeleteFile("D:\\1.txt");
+*/
+ DeleteFile("D:\\1.txt");
+ return 0;
+}

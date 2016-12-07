@@ -1,0 +1,243 @@
+//weizengke 2011-7-8
+/*
+计算器（表达式）
+栈操作；
+运算符栈顶的优先级较高
+可以处理确保正确的表达式的求值,可以使浮点型的小数运算
+
+  输入一下各种表达式：
+    8*.2
+ 	-2
+	5.6*(-2*(1+(-3)))
+	2*((4+2)*5)-7/11
+	((((2+3)*2+4.0*2)*4)+2)*4
+	1+2+3
+	2*(6+((2+3)*2+2)/2+3)
+	2*(2+(3+(4+2*(5+6))))
+*/
+
+#include<iostream>
+#include <stack>
+#include <string>
+#include <cstring>
+#include <cstdio>
+#include <cmath>
+#include <ctype.h> 
+#include <cstdlib>
+using namespace std;
+const int NUM_MAX = 10;
+const int MAX = 1000;
+stack<char> sOper;
+stack<double> sNum;
+char expr[1000]="\0";
+bool isNum(char c)
+{
+	if(c=='.'||isdigit(c)) return 1;
+	else return 0;
+}
+bool isCalaOper(char c)
+{
+	if(c=='+'||c=='-'||c=='*'||c=='/') return true;
+	else return false;
+}
+bool isOper(char c)
+{
+	if(c=='+'||c=='-'||c=='*'||c=='/'||c=='('||c==')'||c=='=') return true;
+	else return false;
+}
+double calc(double a, char oper, double b)
+{
+	switch (oper)
+	{
+	case '+': return a+b;
+		break;
+	case '-': return a-b;
+		break;
+	case '*': return a*b;
+		break;
+	case '/': return a/b;
+		break;
+	}
+}
+int YXJ(char op)
+{
+
+	if(op=='=') return -1;
+
+	if(sOper.empty()) return 0;
+
+	char preOper=sOper.top();
+
+	if(preOper=='(') return 2; 
+
+	if(op=='*'||op=='/')  {
+		if(preOper=='+'||preOper=='-') return 1;
+		else return -1;
+	}
+	if(op=='+'||op=='-')  {
+		if(preOper=='*'||preOper=='/') return -1;
+		else return -1;
+	}
+	
+}
+
+void getValue(int preI,int n) //应该限制n的长度。
+{
+	char cnum[NUM_MAX];
+	memset(cnum,'\0',sizeof(cnum));
+	double num;
+	strncpy(cnum,&expr[preI],n);   	//	cout<<preI<<"--"<<i<<"=";
+	num=atof(cnum);
+	sNum.push(num);
+}
+
+double caculate()
+{
+	double res;
+	char op=sOper.top();
+	if(op!=')'&&op!='(')
+	{
+		sOper.pop();
+		double a,b;
+		b=sNum.top();
+		sNum.pop();
+		a=sNum.top();
+		sNum.pop();
+	//	cout<<"calc:"<<a<<op<<b<<"=";
+		res = calc(a,op,b);
+	//	cout<<res<<endl;
+		sNum.push(res);
+	}
+	return res;
+}
+int init()
+{
+	int i=0,j;
+	int len=strlen(expr);
+	while(expr[i]!='\0')
+	{
+		if(!(isNum(expr[i])||isOper(expr[i])||expr[i]==' ')) return 0;
+
+		if(expr[i]==' ')
+		{
+			for (j=i;j<len;j++)
+			{
+				expr[j]=expr[j+1];
+			}
+			expr[j]='\0';
+			len--;
+		}
+		i++;
+	}
+	expr[i]='=';
+	expr[i+1]='\0';
+	return 1;
+}
+int Check(char *str)   //检查括号匹配性
+{
+	stack <char> s;
+	int i=0;
+	while (str[i]!='\0')
+	{
+		if(str[i]=='(') s.push(str[i]);
+		if(str[i]==')'){
+			if(s.empty()) return 0;
+			else s.pop();
+		}
+		i++;
+	}
+	if(s.empty()) return 1;
+	else return 0;
+}
+int main()
+{
+
+  // freopen("data.in","r",stdin);
+//freopen("data.out","w",stdout);
+   while(gets(expr))
+   {
+	 if(strcmp(expr,"0")==0) break;
+
+	 if(!Check(expr)){
+		 cout<<expr<<" is Not Format (括号不匹配)..."<<endl;
+		 continue;
+	 }
+	 if(!init()) {//初始化去掉空格并加上=号......可增加检查语法错误方法
+		 cout<<expr<<" is Not Format (存在非法字符)..."<<endl;
+		 continue;
+	 } 
+
+	int i=0;
+	int preI=0;
+ 	for (i=0;expr[i]!='\0';i++)
+ 	{
+	
+		if(isNum(expr[i])){
+			preI=i;
+			while(isNum(expr[i])) {
+				i++;
+			}
+			getValue(preI,i-preI);
+		}
+		
+		if(isOper(expr[i])) {
+			if(expr[i]=='(') {//是'(',不必处理
+				sOper.push(expr[i]);
+				continue;
+			}
+		if(expr[i]==')') { //处理最近一对括号
+			while(sOper.top()!='(')  //持续计算到弹出左括号
+			{
+				caculate();
+			}
+			sOper.pop();//弹出左括号
+			continue;
+		}
+		if(isCalaOper(expr[i-1])) {
+			//cout<<expr<<" Is Not Format..."<<endl;
+			break;
+				//表达是错误
+		}
+      //暂时无法处理 *2+1之类的非-+得变号问题
+		if(/*(expr[i]=='-'||expr[i]=='+')&&*/(expr[i-1]=='('||i==0)) 
+			sNum.push(0);  //处理变号  2*(-5+6) to 2*(0-5+6)
+		else {
+				//cout<<expr<<" Is Not Format..."<<endl;
+				//break;
+				//表达是错误
+			}
+
+			//循环判断是否需要持续进行计算，并执行相应动作
+		while(!sOper.empty()){
+			int Yxj=YXJ(expr[i]);
+			if(Yxj==-1)	caculate();
+			if(Yxj==0)	caculate();
+			if(Yxj==1)	break;
+			if(Yxj==2)	break;
+		}
+			//本次运算符入栈
+			sOper.push(expr[i]);
+			continue;
+		}
+		//表达是错误(出现其他字符)
+ 	}
+
+	//处理最后一步(此时必然只剩下最后一次运算)
+	sOper.pop();//剔除等号
+	if(!sOper.empty()){
+		caculate();
+	}
+	double ans=sNum.top();
+	sNum.pop();
+
+	if(!sNum.empty()||!sOper.empty()) cout<<expr<<" Is Not Format (运算符使用错误)..."<<endl;
+	else {
+		printf("%.2lf\n",ans);
+	//	cout<<ans<<endl;
+	}
+	while(!sNum.empty()) sNum.pop();
+	while(!sOper.empty()) sOper.pop();
+
+   }
+	return 0;
+}

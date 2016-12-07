@@ -1,0 +1,35 @@
+#include<iostream>
+#include<cstring>
+#define MAX 100000001
+using namespace std;
+int sushu(int n) 
+{
+int i,j,k=1;
+char *is= new char[n+1];
+memset(is,0,sizeof(char)*(n+1));  
+for(i=3;i<=n;i=i+2)
+{
+   for(j=3;j<=i&&i*j<=n;j=j+2)
+   {
+    is[i*j]=1;   
+   }
+   if(is[i]==0) 
+	   k++;
+}
+return k;
+}
+
+int main()
+{
+	int n;
+	while(cin>>n,n!=0)
+	{
+		if(n==1)
+		{
+			cout<<0<<endl;
+			continue;
+		}
+		cout<<sushu(n)<<endl;
+	}
+	return 0;
+}

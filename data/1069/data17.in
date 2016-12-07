@@ -1,0 +1,6 @@
+id int(2)
+na char(10)
+num int(9)
+#
+na="zollty"
+num=1234567891000

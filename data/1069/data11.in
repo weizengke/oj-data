@@ -1,0 +1,5 @@
+id int(2)
+name char(10)
+#
+name="zollty"
+id=1

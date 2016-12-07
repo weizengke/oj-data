@@ -1,0 +1,11 @@
+4
+system
+shutdown
+SOCKET
+DeleteFile
+5
+#include<stdio.h>
+int main(){ //main
+ system("calc");
+ return 0;
+}

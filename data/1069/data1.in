@@ -1,0 +1,4 @@
+id int(4)
+name char(20)
+#
+id=9999
