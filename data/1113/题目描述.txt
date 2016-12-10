@@ -1,0 +1,24 @@
+题意：给定n（1  <= n <= 1000)个不同数a ( -536870912 <= a <= +536870911) ，找一个最大的数，使其恰好等于另外三个不同的数之和。若不存在， 则输出"no solution".
+Sample Input
+
+5
+2 
+3 
+5 
+7 
+12
+
+Sample Output
+12
+
+
+Sample Input
+5
+2 
+16 
+64 
+256 
+1024
+
+Sample Output
+no solution
